@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script src="https://cdn.userway.org/widget.js" data-account="lhW7CHBYVa"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rancho Azul - Reservas</title>
@@ -158,6 +159,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const personalDataSection = document.getElementById('personal-data-section'); 
         const reservationForm = document.getElementById('reservation-form-modal');
         const fechaInput = document.getElementById('fecha');
+        const horaInput = document.getElementById('hora');
+        const clientesInput = document.getElementById('clientes');
 
         // Establecer la fecha mínima de forma elegante (hoy)
         const today = new Date().toISOString().split('T')[0];
@@ -174,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Restablecer el estado inicial del formulario
             if (statusMessage) {
                 statusMessage.textContent = 'Presiona "Comprobar" para verificar mesas.';
-                statusMessage.className = 'alert'; // Usa una clase base para darle estilo consistente
+                statusMessage.className = 'alert'; 
                 statusMessage.style.backgroundColor = '#e9ecef'; 
                 statusMessage.style.color = '#495057'; 
                 statusMessage.classList.remove('hidden'); 
@@ -222,15 +225,18 @@ document.addEventListener('DOMContentLoaded', function() {
             checkAvailabilityButton.addEventListener('click', function(e) {
                 e.preventDefault(); 
                 
+                // Ocultar mensajes previos
                 statusMessage.classList.add('hidden');
                 errorMessage.classList.add('hidden');
                 personalDataSection.classList.add('hidden'); 
     
-                const hora = document.getElementById('hora').value;
-                const fechaInput = fechaInput.value;
-                const clientes = parseInt(document.getElementById('clientes').value);
+                // Obtener valores de los inputs
+                const hora = horaInput.value;
+                const fechaValue = fechaInput.value;
+                const clientes = parseInt(clientesInput.value);
     
-                if (!hora || !fechaInput || isNaN(clientes) || clientes < 1) {
+                // Validación de campos
+                if (!hora || !fechaValue || isNaN(clientes) || clientes < 1) {
                     errorMessage.textContent = '⛔ Por favor, introduce la fecha, hora y un número de personas válido (mínimo 1).';
                     errorMessage.style.backgroundColor = '#f8d7da';
                     errorMessage.style.color = '#721c24';
@@ -238,7 +244,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
     
-                const fecha = new Date(fechaInput + 'T00:00:00'); 
+                // Crear objeto fecha
+                const fecha = new Date(fechaValue + 'T00:00:00'); 
                 const dayOfWeek = fecha.getUTCDay(); // 0 = Domingo, 6 = Sábado
                 const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
                 
@@ -285,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorMessage.classList.add('hidden');
                 personalDataSection.classList.add('hidden');
 
-                // Simular el envío de datos al servidor (Aquí iría AJAX)
+                // Simular el envío de datos al servidor
                 const nombre = document.getElementById('nombre').value;
 
                 // Mostrar mensaje de éxito en la página
@@ -295,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div style="padding: 40px; text-align: center;">
                             <h2>🎉 ¡Reserva Exitosa!</h2>
                             <p style="font-size: 1.2em; color: #155724;">
-                                Gracias, **${nombre}**. Su mesa ha sido reservada.
+                                Gracias, <strong>${nombre}</strong>. Su mesa ha sido reservada.
                             </p>
                             <p>Recibirá una confirmación detallada por correo electrónico pronto.</p>
                             <button onclick="window.location.href='index.html'" class="btn-secondary-elegant cta-button" style="margin-top: 20px;">
@@ -305,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                 }
                 
-                closeModal(); // Cierra el modal, el mensaje de éxito se muestra en la página principal
+                closeModal();
                 
             });
         }
